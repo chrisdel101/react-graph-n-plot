@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import Graph from './components/Graph'
+import Graph from 'react-graph-n-plot'
 
 const plotSets = {
   1: {

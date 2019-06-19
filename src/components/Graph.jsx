@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
-import Cell from './Cell'
-import Point from './Point'
+import Cell from './Cell.jsx'
+import Point from './Point.jsx'
 // import Cursor from './Cursor'
 import utils from '../graph_utils'
 
@@ -312,16 +312,16 @@ class Graph extends Component {
       return leg.legID === legID
     })
 
-    //index for arr of cell nums
+    // index for arr of cell nums
     let holdingArrIndex = this._legIndex(arr[0].legID)
     // index for json with legs info
     let dataIndex = this.state.legs.indexOf(arr[0])
-    //all previous legs to color
+    // all previous legs to color
     // var previousLegNames = this.state.legs.slice(0,index)
 
     // get arr of all previous arrs to cell nums
     // var previousLegArrs = this.state.holdAllLegColorArrs.slice(0, holdingArrIndex)
-    //get current arr leg of cell nums
+    // get current arr leg of cell nums
     // var currentLegArr = this.state.holdAllLegColorArrs[holdingArrIndex]
     // console.log('previouslegs', previousLegArrs)
     // console.log('currnt arr', currentLegArr)
@@ -649,7 +649,7 @@ class Graph extends Component {
       let stop2 = this.state.stops[index + 1]
       if (stop2 === undefined) return false
       if (
-        //x/y are both btw
+        // x/y are both btw
         ((coords.y > stop1.y && coords.y < stop2.y) ||
           (coords.y < stop1.y && coords.y > stop2.y)) &&
         ((coords.x > stop1.x && coords.x < stop2.x) ||
@@ -671,7 +671,7 @@ class Graph extends Component {
       ) {
         return coord
       } else if (
-        //coords are exact match
+        // coords are exact match
         coords.x === stop1.x &&
         coords.y === stop1.y
       ) {
@@ -706,8 +706,8 @@ class Graph extends Component {
 
   render() {
     return (
-      <main className="graph-container">
-        <div className="graph">
+      <main className='graph-container'>
+        <div className='graph'>
           {' '}
           {this.state.plotSets.map((instance, i) => {
             return (
@@ -731,7 +731,7 @@ class Graph extends Component {
                 ? null
                 : this.state.finalStopColorCellObj
             }
-            type="all"
+            type='all'
           />{' '}
         </div>
       </main>

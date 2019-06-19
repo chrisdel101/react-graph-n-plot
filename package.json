@@ -5,7 +5,7 @@
   "author": "chrisdel101",
   "license": "MIT",
   "repository": "chrisdel101/react-graph-n-plot",
-  "main": "dist/index.js",
+  "main": "export.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
   "engines": {

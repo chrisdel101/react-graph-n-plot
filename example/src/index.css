@@ -1,5 +1,80 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+:root {
+  --graph-size-x: 0;
+  --graph-size-y: 0;
+}
+
+.graph-container {
+  display: flex;
+  flex-direction: unset;
+  position: relative;
+  bottom: 0;
+}
+
+.graph {
+  display: grid;
+  border: 1px solid black;
+  grid-gap: 1px;
+  background-color: black;
+  grid-template-rows: repeat(var(--graph-size-x), 10px);
+  grid-template-columns: repeat(var(--graph-size-y), 10px);
+}
+
+.cell-container {
+  grid-gap: 1px;
+  border: 1px solid black;
+  background-color: white;
+}
+
+.complete-color {
+  background-color: #9c0000 !important;
+}
+
+.leg-color0 {
+  background-color: pink !important;
+}
+
+.cell {
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+}
+
+.cursor {
+  font-size: 30px !important;
+  color: var(--driver-color) !important;
+  position: relative !important;
+}
+
+.cursor-wrapper.show {
+  position: absolute;
+  bottom: 0;
+  z-index: 2;
+  left: 0;
+}
+.cursor-wrapper.hide {
+  display: none;
+}
+
+.point-marker:before {
+  content: '\25CF';
+  font-size: 10px;
+}
+
+.point-marker {
+  position: absolute;
+  bottom: 0;
 }

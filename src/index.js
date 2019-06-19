@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Graph from './components/Graph.jsx'
+import './styles.css'
 
 const plotSets = {
   1: {

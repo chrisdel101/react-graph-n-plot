@@ -1,5 +1,5 @@
 import React from 'react'
-import utils from '../graph_utils'
+import utils from '../utils/graph_utils'
 
 // takes the num of boxes/cells to be produced
 class Cell extends React.Component {
@@ -86,8 +86,7 @@ class Cell extends React.Component {
     let { legsColor } = this.props
     legsColor = legsColor.leg
     let hasLegColor = (() => {
-      if (!legsColor || !legsColor.length || !legsColor.includes(i))
-        return false
+      if (!legsColor || !legsColor.length || !legsColor.includes(i)) { return false }
       return true
     })()
     return <this.CellMarkup hasLegColor={hasLegColor} key={i} id={i} />
@@ -103,8 +102,7 @@ class Cell extends React.Component {
   completedColorsAddLogic(i) {
     let { completeColor } = this.props
     let hasCompletionColor = (() => {
-      if (!completeColor || !completeColor.length || !completeColor.includes(i))
-        return false
+      if (!completeColor || !completeColor.length || !completeColor.includes(i)) { return false }
       return true
     })()
     return (
@@ -140,7 +138,7 @@ class Cell extends React.Component {
         style={this.addColor(input.color)}
         id={idStr}
         key={input.id}
-        className="cell"
+        className='cell'
       />
     )
   }

@@ -3,53 +3,29 @@ import React, { Component } from 'react'
 import Cell from './Cell.jsx'
 import Point from './Point.jsx'
 // import Cursor from './Cursor'
-import utils from '../graph_utils'
+import utils from '../utils/graph_utils'
+import styles from '../utils/styles'
 
 class Graph extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      storeGraphSize: { x: '20', y: '20' },
-      plotObjs: [],
-      tempPlotObj: { x: '', y: '' },
-      cancelSlide: false,
-      sliderSlicedChunk: [],
-      iconStartAtfirstStop: false,
-      sliderIndex: 0,
-      initialSliderChange: true,
-      sliderCoordsArrs: [],
       stopsDirsArr: [],
-      // utilsTop: '',
-      colors: [
-        'red',
-        'Orange',
-        'DodgerBlue',
-        'MediumSeaGreen',
-        'Violet',
-        'SlateBlue',
-        'Tomato'
-      ],
-      showStopNames: false,
       allColorsCounter: 0,
       legColorsCounter: 0,
       completedColorsCounter: 0,
       colorType: '',
-      loadingDataArr: [],
       cursorIndex: 0,
       createCounter: 0,
       legsCoordsObjs: [],
       legsStartEndObjs: [],
       plotSets: [],
       gridSets: [],
-      jsonStops: [],
-      stopsCopy: [],
       legToColorID: '',
       cursorFormX: '',
       cursorFormY: '',
-      cursorLegInput: '',
       cursorArr: [],
       cursorInputProgress: '',
-      currentCursor: '',
       startingCellNumAll: 0,
       startingCellNumPartial: '',
       previousLegEndCell: 0,
@@ -74,6 +50,7 @@ class Graph extends Component {
     }
   }
   componentDidMount() {
+    console.log(this.props)
     this.createGraph()
     this.loadPlotDatatoPlotSets()
     this.loadGridDataintoGridSets()
@@ -706,8 +683,11 @@ class Graph extends Component {
 
   render() {
     return (
-      <main className='graph-container'>
-        <div className='graph'>
+      <main
+        className='graph-container'
+        style={styles(this.props).graphContainer}
+      >
+        <div className='graph' style={styles(this.props).graph}>
           {' '}
           {this.state.plotSets.map((instance, i) => {
             return (
@@ -715,7 +695,6 @@ class Graph extends Component {
                 key={i}
                 color={instance ? instance.plotColor : null}
                 coordsArrs={this.state.stopsDirsArr[i]}
-                toggleStopNames={this.state.showStopNames}
               />
             )
           })}{' '}

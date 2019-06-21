@@ -13,17 +13,7 @@ npm install --save react-graph-n-plot
 ## Usage
 
 ```jsx
-import React, { Component } from 'react'
-
-import MyComponent from 'react-graph-n-plot'
-
-class Example extends Component {
-  render () {
-    return (
-      <MyComponent />
-    )
-  }
-}
+In Development
 ```
 
 ## License

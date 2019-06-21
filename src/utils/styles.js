@@ -22,8 +22,19 @@ const cellStyles = {
     backgroundColor: '#fff'
   }
 }
+const pointStyles = {
+  'point-marker:before': {
+    content: '/25CF',
+    fontSize: '10px'
+  },
+  'point-marker': {
+    position: 'absolute',
+    bottom: '0px'
+  }
+}
 module.exports = {
   cellStyles,
-  gridStyles
+  gridStyles,
+  pointStyles
 }
 // export gridStyles

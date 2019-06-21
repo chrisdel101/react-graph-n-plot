@@ -389,7 +389,6 @@ class Graph extends Component {
     })
   }
   colorGrid(x, y, type, lineColor, objStore) {
-    console.log('lC', lineColor)
     // calc num of units to move based on prev position
     let tempCellNumsArr = []
     let tempCellNumsObj = {}

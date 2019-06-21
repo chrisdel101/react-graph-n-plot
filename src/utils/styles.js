@@ -1,5 +1,4 @@
-const styles = function(props) {
-  console.log('PP', props)
+const gridStyles = function(props) {
   return {
     graphContainer: {
       display: 'flex',
@@ -16,4 +15,15 @@ const styles = function(props) {
     }
   }
 }
-export default styles
+const cellStyles = {
+  cell: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#fff'
+  }
+}
+module.exports = {
+  cellStyles,
+  gridStyles
+}
+// export gridStyles

@@ -1,5 +1,6 @@
 import React from 'react'
 import utils from '../utils/graph_utils'
+import styles from '../utils/styles'
 
 // takes the num of boxes/cells to be produced
 class Cell extends React.Component {
@@ -86,7 +87,9 @@ class Cell extends React.Component {
     let { legsColor } = this.props
     legsColor = legsColor.leg
     let hasLegColor = (() => {
-      if (!legsColor || !legsColor.length || !legsColor.includes(i)) { return false }
+      if (!legsColor || !legsColor.length || !legsColor.includes(i)) {
+        return false
+      }
       return true
     })()
     return <this.CellMarkup hasLegColor={hasLegColor} key={i} id={i} />
@@ -102,7 +105,13 @@ class Cell extends React.Component {
   completedColorsAddLogic(i) {
     let { completeColor } = this.props
     let hasCompletionColor = (() => {
-      if (!completeColor || !completeColor.length || !completeColor.includes(i)) { return false }
+      if (
+        !completeColor ||
+        !completeColor.length ||
+        !completeColor.includes(i)
+      ) {
+        return false
+      }
       return true
     })()
     return (
@@ -123,16 +132,25 @@ class Cell extends React.Component {
     // key object key with i
     return <this.CellMarkup key={i} id={i} color={allColorCellObj[i]} />
   }
+  combineStyles(cellObj) {
+    if (!this.state.styles) return
+    // console.log(this.state.styles)
+    const lineColor = this.addColor(cellObj)
+    let allStyle = { ...this.state.styles, ...lineColor }
+    return allStyle
+  }
   addColor(cellObj) {
     if (cellObj) {
       return {
         backgroundColor: cellObj.color
       }
+    } else {
+      return styles.cellStyles.cell
     }
-    return null
   }
   CellMarkup(input) {
     let idStr = `id${input.id}`
+    // console.log()
     return (
       <div
         style={this.addColor(input.color)}
@@ -143,11 +161,13 @@ class Cell extends React.Component {
     )
   }
   componentDidMount() {
+    this.setState({
+      styles
+    })
     this.toggleColor('all')
     // get arr of all cell nums
   }
   render() {
-    // console.log(this.props)
     if (this.props.toRender && this.props.toRender.length) {
       return <React.Fragment>{this.renderCells()}</React.Fragment>
     } else {

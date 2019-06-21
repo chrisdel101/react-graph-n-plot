@@ -4,7 +4,7 @@ import Cell from './Cell.jsx'
 import Point from './Point.jsx'
 // import Cursor from './Cursor'
 import utils from '../utils/graph_utils'
-import styles from '../utils/styles'
+import gridStyles from '../utils/styles'
 
 class Graph extends Component {
   constructor(props) {
@@ -389,6 +389,7 @@ class Graph extends Component {
     })
   }
   colorGrid(x, y, type, lineColor, objStore) {
+    console.log('lC', lineColor)
     // calc num of units to move based on prev position
     let tempCellNumsArr = []
     let tempCellNumsObj = {}
@@ -685,9 +686,9 @@ class Graph extends Component {
     return (
       <main
         className='graph-container'
-        style={styles(this.props).graphContainer}
+        style={gridStyles.gridStyles(this.props).graphContainer}
       >
-        <div className='graph' style={styles(this.props).graph}>
+        <div className='graph' style={gridStyles.gridStyles(this.props).graph}>
           {' '}
           {this.state.plotSets.map((instance, i) => {
             return (

@@ -159,7 +159,7 @@ var utils = (function() {
         return 0
       }
 
-      // use the larger leg to updaet val - TODO: make both percents equal so driver fits back into grid
+      //use the larger leg to updaet val - TODO: make both percents equal so driver fits back into grid
       if (xAbsDiff > yAbsDiff) {
         return xPercent
       } else if (xAbsDiff < yAbsDiff) {
@@ -173,6 +173,7 @@ var utils = (function() {
         }
       } else {
         console.error('An error occured in the percentage calcs')
+        return
       }
     },
     // make json from the entered plot points
@@ -196,8 +197,8 @@ var utils = (function() {
       this.cellNum = cellNum
       this.color = color
     },
-    _makePLotCellObj(cellNum, color, CellFunc) {
-      return new CellFunc(cellNum, color)
+    _makePLotCellObj(cellNum, color, cellFunc) {
+      return new cellFunc(cellNum, color)
     },
     _arrOfObjsToArr(arrOfObjs, property) {
       return arrOfObjs.map(obj => {

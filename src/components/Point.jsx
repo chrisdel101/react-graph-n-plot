@@ -18,7 +18,6 @@ function Point(props) {
       // console.log('SA', stylesArr[i])
       for (let a = 0; a < j.length; a += 1) {
         // console.log('KEY', j[a])
-        // console.log('VAL', k[a])
         output += ` ${j[a]}: ${k[a]}; `
       }
 

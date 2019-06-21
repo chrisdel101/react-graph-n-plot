@@ -24,7 +24,7 @@ const cellStyles = {
 }
 const pointStyles = {
   'point-marker:before': {
-    content: '25CF',
+    content: '●',
     'font-size': '10px'
   },
   'point-marker': {

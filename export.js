@@ -351,8 +351,6 @@ var toConsumableArray = function (arr) {
   }
 };
 
-// takes the num of boxes/cells to be produced
-
 var Cell = function (_React$Component) {
   inherits(Cell, _React$Component);
 
@@ -362,16 +360,7 @@ var Cell = function (_React$Component) {
     var _this = possibleConstructorReturn(this, (Cell.__proto__ || Object.getPrototypeOf(Cell)).call(this, props));
 
     _this.state = {
-      allColored: false,
-      legColored: false,
-      completeColored: false,
-      allColorsCounter: 0,
-      legColorsCounter: 0,
-      completedColorsCounter: 0,
-      previousLegIndex: '',
-      cellsMounted: {},
-      cellNumsArr: [],
-      testArr: ['one', 'two', 'three']
+      allColored: false
     };
     _this.CellMarkup = _this.CellMarkup.bind(_this);
     return _this;
@@ -382,7 +371,6 @@ var Cell = function (_React$Component) {
     value: function renderCells(i) {
       var _this2 = this;
 
-      // console.log(this.props.gridColors)
       if (this.props.toRender) {
         var toRender = this.props.toRender;
 
@@ -390,25 +378,7 @@ var Cell = function (_React$Component) {
           var result = void 0;
           switch (_this2.props.type) {
             case 'all':
-              if (!_this2.state.allColored) {
-                result = _this2.allColorsRemoveLogic(i);
-              } else if (_this2.state.allColored) {
-                result = _this2.allColorsAddLogic(i);
-              }
-              break;
-            case 'leg':
-              if (!_this2.state.legColored) {
-                result = _this2.legColorsRemoveLogic(i);
-              } else if (_this2.state.legColored) {
-                result = _this2.legColorsAddLogic(i);
-              }
-              break;
-            case 'complete':
-              if (!_this2.state.completeColored) {
-                result = _this2.completedColorsRemoveLogic(i);
-              } else if (_this2.state.completeColored) {
-                result = _this2.completedColorsAddLogic(i);
-              }
+              result = _this2.allColorsAddLogic(i);
               break;
             default:
               // on first render just run markup
@@ -420,100 +390,12 @@ var Cell = function (_React$Component) {
       }
     }
   }, {
-    key: 'toggleColor',
-    value: function toggleColor(type) {
-      if (type === 'all') {
-        // console.log('opposite', this.state.allColored)
-        this.setState({
-          allColored: utils._toggleState(this.state.allColored)
-        });
-        // console.log(this.state.allColored)
-      } else if (type === 'leg') {
-        console.log('opposite', this.state.legColored);
-        this.setState({
-          legColored: utils._toggleState(this.state.legColored)
-        });
-      } else if (type === 'complete') {
-        console.log('opposite', this.state.completeColored);
-        this.setState({
-          completeColored: utils._toggleState(this.state.completeColored)
-        });
-      }
-    }
-  }, {
-    key: 'allColorsRemoveLogic',
-    value: function allColorsRemoveLogic(i) {
-      var gridColors = this.props.gridColors;
-
-      var hasStopColor = function () {
-        if (gridColors && gridColors.includes(i)) return false;
-      }();
-      return React__default.createElement(this.CellMarkup, { hasStopColor: hasStopColor, key: i, id: i });
-    }
-  }, {
-    key: 'legColorsAddLogic',
-    value: function legColorsAddLogic(i) {
-      var legsColor = this.props.legsColor;
-
-      legsColor = legsColor.leg;
-      var hasLegColor = function () {
-        if (!legsColor || !legsColor.length || !legsColor.includes(i)) {
-          return false;
-        }
-        return true;
-      }();
-      return React__default.createElement(this.CellMarkup, { hasLegColor: hasLegColor, key: i, id: i });
-    }
-  }, {
-    key: 'legColorsRemoveLogic',
-    value: function legColorsRemoveLogic(i) {
-      var legsColor = this.props.legsColor;
-
-      legsColor = legsColor.leg;
-      var hasLegColor = function () {
-        if (legsColor && legsColor.includes(i)) return false;
-      }();
-      return React__default.createElement(this.CellMarkup, { hasLegColor: hasLegColor, key: i, id: i });
-    }
-  }, {
-    key: 'completedColorsAddLogic',
-    value: function completedColorsAddLogic(i) {
-      var completeColor = this.props.completeColor;
-
-      var hasCompletionColor = function () {
-        if (!completeColor || !completeColor.length || !completeColor.includes(i)) {
-          return false;
-        }
-        return true;
-      }();
-      return React__default.createElement(this.CellMarkup, { hasCompletionColor: hasCompletionColor, key: i, id: i });
-    }
-  }, {
-    key: 'completedColorsRemoveLogic',
-    value: function completedColorsRemoveLogic(i) {
-      var completeColor = this.props.completeColor;
-
-      var hasCompletionColor = function () {
-        if (completeColor && completeColor.includes(i)) return false;
-      }();
-      return React__default.createElement(this.CellMarkup, { hasCompletionColor: hasCompletionColor, key: i, id: i });
-    }
-  }, {
     key: 'allColorsAddLogic',
     value: function allColorsAddLogic(i) {
       var allColorCellObj = this.props.allColorCellObj;
       // key object key with i
 
       return React__default.createElement(this.CellMarkup, { key: i, id: i, color: allColorCellObj[i] });
-    }
-  }, {
-    key: 'combineStyles',
-    value: function combineStyles(cellObj) {
-      if (!this.state.styles) return;
-      // console.log(this.state.styles)
-      var lineColor = this.addColor(cellObj);
-      var allStyle = _extends({}, this.state.styles, lineColor);
-      return allStyle;
     }
   }, {
     key: 'addColor',
@@ -530,22 +412,12 @@ var Cell = function (_React$Component) {
     key: 'CellMarkup',
     value: function CellMarkup(input) {
       var idStr = 'id' + input.id;
-      // console.log()
       return React__default.createElement('div', {
         style: this.addColor(input.color),
         id: idStr,
         key: input.id,
         className: 'cell'
       });
-    }
-  }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      this.setState({
-        styles: styles
-      });
-      this.toggleColor('all');
-      // get arr of all cell nums
     }
   }, {
     key: 'render',
@@ -567,6 +439,12 @@ var Cell = function (_React$Component) {
   }]);
   return Cell;
 }(React__default.Component);
+
+Cell.propTypes = {
+  allColorCellObj: PropTypes.object,
+  toRender: PropTypes.array,
+  type: PropTypes.string
+};
 
 // takes and array of directions and pixes for x and y
 function Point(props) {
@@ -904,7 +782,6 @@ var Graph = function (_Component) {
   }, {
     key: 'combineStyles',
     value: function combineStyles() {
-      console.log('DB', styles.bodyStyles.body);
       var obj = _extends({}, styles.gridStyles(this.props).graphContainer, styles.bodyStyles.body);
       return obj;
     }

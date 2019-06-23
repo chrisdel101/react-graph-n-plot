@@ -271,7 +271,6 @@ class Graph extends Component {
     }
   }
   combineStyles() {
-    console.log('DB', gridStyles.bodyStyles.body)
     let obj = {
       ...gridStyles.gridStyles(this.props).graphContainer,
       ...gridStyles.bodyStyles.body

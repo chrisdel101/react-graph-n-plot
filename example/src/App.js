@@ -26,16 +26,6 @@ const plotSets = {
 }
 export default class App extends Component {
   render() {
-    return (
-      <Graph
-        setGraphSize={{ x: 20, y: 20 }}
-        plotSets={plotSets}
-        cursors={[{ color: 'blue', coords: { x: 10, y: 10 } }]}
-        // legToColorID="AB"
-        colorAllPoints={true}
-        lineColor={''}
-        // cursor={''}
-      />
-    )
+    return <Graph setGraphSize={{ x: 20, y: 20 }} plotSets={plotSets} />
   }
 }

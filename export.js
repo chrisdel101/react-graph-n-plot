@@ -4,6 +4,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var React = require('react');
 var React__default = _interopDefault(React);
+var PropTypes = _interopDefault(require('prop-types'));
 
 var utils = function () {
   return {
@@ -645,43 +646,17 @@ var Graph = function (_Component) {
     _this.state = {
       stopsDirsArr: [],
       allColorsCounter: 0,
-      legColorsCounter: 0,
-      completedColorsCounter: 0,
       colorType: '',
-      cursorIndex: 0,
-      createCounter: 0,
-      legsCoordsObjs: [],
-      legsStartEndObjs: [],
       plotSets: [],
       gridSets: [],
-      legToColorID: '',
-      cursorFormX: '',
-      cursorFormY: '',
-      cursorArr: [],
-      cursorInputProgress: '',
       startingCellNumAll: 0,
-      startingCellNumPartial: '',
-      previousLegEndCell: 0,
       previousStopX: 0,
       previousStopY: 0,
-      previousLegX: 0,
-      previousLegY: 0,
-      partialLegStartCoords: '',
-      partialLegEndCoords: '',
       boxesToRender: Array.from({ length: 100 }, function (v, i) {
         return i;
       }),
-      holdAllStopColorIndexes: [],
-      holdAllLegColorArrs: [],
-      holdingCompletedArrs: [],
-      finalStopColorObjs: [],
-      finalLegColorObj: [],
-      finalCompletedColorsArr: [],
       finalStopColorCellObj: {},
-      finalDriverMoveObj: '',
-      finalSliderCoords: [],
-      finalStopColorCellArr: [],
-      legStartEndCellNums: []
+      finalStopColorCellArr: []
     };
     return _this;
   }
@@ -689,29 +664,22 @@ var Graph = function (_Component) {
   createClass(Graph, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      var _this2 = this;
-
       this.createGraph();
       this.loadPlotDatatoPlotSets();
       this.loadGridDataintoGridSets();
-      this.addNewCursor();
-      setTimeout(function () {
-        _this2.updateDriverWithCoords('', 'manual');
-        _this2.colorLeg(_this2.props.legToColorID);
-      });
     }
     // make props coords into useable json
 
   }, {
     key: 'loadPlotDatatoPlotSets',
     value: function loadPlotDatatoPlotSets(type) {
-      var _this3 = this;
+      var _this2 = this;
 
       // load plotsets into state
       Object.values(this.props.plotSets).forEach(function (set$$1) {
         // update with _makePlotJson func
         set$$1.plots = utils._makePlotJson(set$$1.plots);
-        _this3.setState(function (prevState) {
+        _this2.setState(function (prevState) {
           return {
             plotSets: [].concat(toConsumableArray(prevState.plotSets), [set$$1])
           };
@@ -735,66 +703,45 @@ var Graph = function (_Component) {
   }, {
     key: 'loadGridDataintoGridSets',
     value: function loadGridDataintoGridSets() {
-      var _this4 = this;
+      var _this3 = this;
 
       setTimeout(function () {
         var _loop = function _loop(key) {
-          var plotsArr = _this4.state.plotSets[key].plots;
-          var lineColor = _this4.state.plotSets[key].lineColor;
+          var plotsArr = _this3.state.plotSets[key].plots;
+          var lineColor = _this3.state.plotSets[key].lineColor;
           // get the array inside and set stops
 
-          _this4._setStopCoords('stop', plotsArr);
+          _this3._setStopCoords('stop', plotsArr);
           var tempGridSet = {
-            legStopsNames: _this4.legConstructor(plotsArr),
-            legStartEnd: [],
-            legColorData: [],
             gridColorDataObjs: [],
             gridColorDataObj: {},
             name: 'set' + key,
-            allColorsCounter: _this4.state.allColorsCounter,
-            legColorsCounter: _this4.state.legColorsCounter,
+            allColorsCounter: _this3.state.allColorsCounter,
             colorType: 'all'
           };
           plotsArr.forEach(function (stop, i) {
-            var _legStartEnd = _this4.legStartEnd(stop.x, stop.y, 'all'),
-                legStartEndCellNums = _legStartEnd.legStartEndCellNums,
-                holdAllLegColorArrs = _legStartEnd.holdAllLegColorArrs;
-
-            tempGridSet.legColorData.push(holdAllLegColorArrs);
-            tempGridSet.legStartEnd.push(legStartEndCellNums);
-
-            var _colorGrid = _this4.colorGrid(stop.x, stop.y, 'all', lineColor, tempGridSet.gridColorDataObj),
+            var _colorGrid = _this3.colorGrid(stop.x, stop.y, 'all', lineColor, tempGridSet.gridColorDataObj),
                 tempCellNumsArr = _colorGrid.tempCellNumsArr,
                 tempCellNumsObj = _colorGrid.tempCellNumsObj;
 
             tempGridSet.gridColorDataObjs = [].concat(toConsumableArray(tempGridSet.gridColorDataObjs), toConsumableArray(tempCellNumsArr));
             tempGridSet.gridColorDataObj = _extends({}, tempGridSet.gridColorDataObj, tempCellNumsObj);
           });
-          _this4.setState(function (prevState) {
+          _this3.setState(function (prevState) {
             return {
               gridSets: [].concat(toConsumableArray(prevState.gridSets), [tempGridSet])
             };
           });
-          _this4.resetColorGridState();
-
-          // this.setState(prevState => ({
-          //   legsCoordsObjs: [...prevState.legsCoordsObjs, legArr],
-          //   legsStartEndObjs: [...prevState.legsStartEndObjs, legData],
-          //   holdAllStopColorIndexes: [
-          //     ...prevState.holdAllStopColorIndexes,
-          //     gridColorData
-          //   ]
-          // }))
-          // })
+          _this3.resetColorGridState();
         };
 
         // loop over each obj
-        for (var key in _this4.state.plotSets) {
+        for (var key in _this3.state.plotSets) {
           _loop(key);
         }
-        _this4.setState({
-          finalStopColorCellArr: _this4.makeSingleCellNumArr(),
-          finalStopColorCellObj: _this4.makeSingleCellNumObj()
+        _this3.setState({
+          finalStopColorCellArr: _this3.makeSingleCellNumArr(),
+          finalStopColorCellObj: _this3.makeSingleCellNumObj()
         });
       });
     }
@@ -804,7 +751,6 @@ var Graph = function (_Component) {
     key: 'makeSingleCellNumArr',
     value: function makeSingleCellNumArr() {
       var arr = this.state.gridSets.map(function (obj) {
-        // console.log(obj)
         return obj.gridColorDataObjs;
       }).flat();
       return arr;
@@ -823,7 +769,7 @@ var Graph = function (_Component) {
   }, {
     key: 'createGraph',
     value: function createGraph() {
-      var _this5 = this;
+      var _this4 = this;
 
       var that = this;
       // take state of graph and multiple to get num
@@ -837,19 +783,11 @@ var Graph = function (_Component) {
           return i;
         })
       });
-      setCSSvars();
-      // sets vals in css to grid size
-      function setCSSvars() {
-        // console.log(that.state.setGraphSize)
-        var root = document.documentElement;
-        root.style.setProperty('--graph-size-x', that.props.setGraphSize.x);
-        root.style.setProperty('--graph-size-y', that.props.setGraphSize.y);
-      }
       setTimeout(function () {
-        _this5.setState({
-          startingCellNumAll: utils._calcStartingCell(_this5.props.setGraphSize)
+        _this4.setState({
+          startingCellNumAll: utils._calcStartingCell(_this4.props.setGraphSize)
         });
-        _this5.calcRowVariaion();
+        _this4.calcRowVariaion();
       });
     }
     // takes coords and type - needs access to state
@@ -883,166 +821,6 @@ var Graph = function (_Component) {
       var xNum = Math.floor(diffObj.xDiff * 0.01 * percent);
       var yNum = Math.floor(diffObj.yDiff * 0.01 * percent);
       return { xNum: xNum, yNum: yNum };
-    }
-    // update createCounter by 1
-
-  }, {
-    key: 'increaseCursorIdindex',
-    value: function increaseCursorIdindex() {
-      var x = this.state.createCounter + 1;
-      this.setState({
-        createCounter: x
-      });
-    }
-    // new add driver - runs on mount and when add button clicked
-
-  }, {
-    key: 'addNewCursor',
-    value: function addNewCursor() {
-      var newCursorObj = {
-        directions: {
-          xDir: 'left',
-          yDir: 'bottom'
-        },
-        pixels: {
-          moveX: 0,
-          moveY: 0
-        },
-        id: this.state.createCounter,
-        name: 'cursor ' + (this.state.createCounter + 1),
-        color: 'blue',
-        show: true
-      };
-      var arr = [];
-      arr.push(newCursorObj);
-      var allCursors = this.state.cursorArr.concat(arr);
-      this.setState({
-        cursorArr: allCursors
-      });
-      this.increaseCursorIdindex();
-    }
-    // on click set driver with coords and send to child
-
-  }, {
-    key: 'updateDriverWithCoords',
-    value: function updateDriverWithCoords(coords, type) {
-      var selectedDriver = this.state.cursorArr[this.state.cursorIndex];
-      var cursorArr = [].concat(toConsumableArray(this.state.cursorArr));
-      if (type === 'form') {
-        // reset to zero
-        this._resetCursor();
-        // from form
-        coords = this._setStopCoords('driver', this.state.cursorFormX, this.state.cursorFormY);
-        // toggle driver to first stop of map start
-      } else if (type === 'checkbox') ; else if (type === 'slider') {
-        // from params
-        coords = this._setStopCoords('driver', coords.x, coords.y);
-      } else if (type === 'manual') {
-        // reset to zero
-        this._resetCursor();
-        coords = this._setStopCoords('driver', '10', '10');
-        cursorArr[this.state.cursorIndex].driverCoords = { x: 5, y: 5 };
-      }
-      // subtract for icon positionSelect
-      coords.pixels.moveX = coords.pixels.moveX - 30;
-      // update the values in the object
-      cursorArr[this.state.cursorIndex].directions = coords.directions;
-      cursorArr[this.state.cursorIndex].pixels = coords.pixels;
-      // set new driver vals
-      this.setState({
-        cursorArr: cursorArr
-      });
-    }
-    // calc up to driver position to color
-
-  }, {
-    key: 'colorCompleted',
-    value: function colorCompleted(legID, type) {
-      var selectedDriver = this.state.cursorArr[this.state.cursorIndex];
-      var arr = this.state.legs.filter(function (leg) {
-        // console.log(leg.legID)
-        return leg.legID === legID;
-      });
-
-      // index for arr of cell nums
-      var holdingArrIndex = this._legIndex(arr[0].legID);
-      // index for json with legs info
-      var dataIndex = this.state.legs.indexOf(arr[0]);
-      // all previous legs to color
-      // var previousLegNames = this.state.legs.slice(0,index)
-
-      // get arr of all previous arrs to cell nums
-      // var previousLegArrs = this.state.holdAllLegColorArrs.slice(0, holdingArrIndex)
-      // get current arr leg of cell nums
-      // var currentLegArr = this.state.holdAllLegColorArrs[holdingArrIndex]
-      // console.log('previouslegs', previousLegArrs)
-      // console.log('currnt arr', currentLegArr)
-      // get current and next leg json info
-      var thisLeg = this.state.legs[dataIndex];
-      // console.log(thisLeg)
-      var legFirstStop = this.state.stops.filter(function (stop) {
-        return stop.name === thisLeg.startStop;
-      });
-      // console.log(legFirstStop)
-      var legLastStop = this.state.stops.filter(function (stop) {
-        return stop.name === thisLeg.endStop;
-      });
-      // get first and end coords
-      var stopStartCoords = {
-        x: legFirstStop[0].x,
-        y: legFirstStop[0].y
-      };
-      var stopEndCoords = {
-        x: legLastStop[0].x,
-        y: legLastStop[0].y
-        // console.log(stopStartCoords)
-        // console.log(stopEndCoords)
-        // get diff to get number of moves
-        // let diffObj = utils._absDiff(stopStartCoords, stopEndCoords)
-        // console.log(diff)
-        // percent driver is complete of leg
-        // let progress = parseInt(this.state.driver.legProgress)
-        // // takes number of moves and percent - returns number of moves that is partial of leg in coords
-        // let numToMove = utils._percentToCoords(diffObj, progress)
-        // console.log('num to move', numToMove)
-        // console.log(this.state.legStartEndCellNums)
-        // cell nums
-      };var start = this.state.legStartEndCellNums[holdingArrIndex];
-      // console.log('start/end', start, end)
-      // set startingCell and start x / y
-
-      // this.state.startingCellNumPartial: start/end cells
-      // 24034 34034
-      // this.partialLegStartCoords: start x/y
-      // {x: 35, y: 80}
-      // this.state.partialLegEndCoords: end
-      // {x: 35, y: 30}
-      var previousLegArrs = this.state.holdAllLegColorArrs.slice(0, holdingArrIndex);
-
-      this.setState({
-        startingCellNumPartial: start,
-        partialLegStartCoords: stopStartCoords,
-        partialLegEndCoords: stopEndCoords,
-        holdingCompletedArrs: [].concat(toConsumableArray(previousLegArrs))
-      });
-      // console.log('startingCell', start)
-      // console.log('stop/start', stopStartCoords)
-      // console.log('partial leg end', stopEndCoords)
-      // console.log('all', [...previousLegArrs])
-
-      // console.log(this.state.holdingCompletedArrs)
-      // console.log(start, end)
-      // set state to start coords
-      // inout end coords
-      // this.state.driverCoords.x = 20
-      // this.state.driverCoords.y = 13
-      // console.log(selectedDriver)
-      if (type === 'data') {
-        // console.log(selectedDriver)
-        this.legStartEnd(selectedDriver.driverCoords.x, selectedDriver.driverCoords.y, 'partial');
-      } else if (type === 'coords') {
-        this.legStartEnd(selectedDriver.driverCoords.x, selectedDriver.driverCoords.y, 'partial');
-      }
     }
     // calc num of cells to vertial based on grid size
 
@@ -1150,189 +928,6 @@ var Graph = function (_Component) {
         tempCellNumsObj: tempCellNumsObj
       };
     }
-    // takes x y and determine start and end cells
-
-  }, {
-    key: 'legStartEnd',
-    value: function legStartEnd(x, y, type) {
-      var tempCellNumsArr = [];
-      var tempX = x;
-      var tempY = y;
-      // start remains the same
-      var tempStartNum = void 0;
-      // cell num changes with calcs
-      var tempCellNum = void 0;
-      var loopAxis = void 0;
-      if (type === 'all') {
-        // on first move only
-        if (this.state.previousLegEndCell === 0) {
-          tempStartNum = this.state.startingCellNumAll;
-          tempCellNum = this.state.startingCellNumAll;
-        } else {
-          tempStartNum = this.state.previousLegEndCell;
-          tempCellNum = this.state.previousLegEndCell;
-        }
-      } else if (type === 'partial') {
-        // start of leg
-        tempCellNum = this.state.startingCellNumPartial;
-        // need to reset previous x and y
-        this.setState({
-          previousLegX: this.state.partialLegStartCoords.x,
-          previousLegY: this.state.partialLegStartCoords.y
-        });
-      }
-
-      // on first move on grid only - for bottom corner
-      var _numToMove2 = this._numToMove(tempX, tempY, 'leg');
-
-      tempX = _numToMove2.tempX;
-      tempY = _numToMove2.tempY;
-      if (this.state.previousLegX === 0 && this.state.previousLegY === 0) {
-        tempX = tempX - 1;
-        tempY = tempY - 1;
-        tempCellNumsArr.push(tempCellNum);
-      }
-      // move in tandem while both vals exist
-      while (tempX && tempY) {
-        // if last was les than current- do this
-        if (this.state.previousLegY < y) {
-          tempCellNum = tempCellNum - this.state.moveRowCells;
-          tempCellNumsArr.push(tempCellNum);
-        } else if (this.state.previousLegY > y) {
-          tempCellNum = tempCellNum + this.state.moveRowCells;
-          tempCellNumsArr.push(tempCellNum);
-        }
-        if (this.state.previousLegX < x) {
-          tempCellNum = tempCellNum + 1;
-          tempCellNumsArr.push(tempCellNum);
-        } else if (this.state.previousLegX > x) {
-          tempCellNum = tempCellNum - 1;
-          tempCellNumsArr.push(tempCellNum);
-        }
-        tempX = tempX - 1;
-        tempY = tempY - 1;
-      }
-      // axis - loop over the only one left X or Y
-      loopAxis = tempY ? loopAxis = tempY : loopAxis = tempX;
-      // if only on val left, move on its own
-      for (var i = 0; i < loopAxis; i++) {
-        if (tempY) {
-          if (this.state.previousLegY < y) {
-            tempCellNum = tempCellNum - this.state.moveRowCells;
-            tempCellNumsArr.push(tempCellNum);
-          } else if (this.state.previousLegY > y) {
-            tempCellNum = tempCellNum + this.state.moveRowCells;
-            tempCellNumsArr.push(tempCellNum);
-          }
-        } else if (tempX) {
-          if (this.state.previousLegX < x) {
-            tempCellNum = tempCellNum + 1;
-            tempCellNumsArr.push(tempCellNum);
-          } else if (this.state.previousLegX > x) {
-            tempCellNum = tempCellNum - 1;
-            tempCellNumsArr.push(tempCellNum);
-          }
-        }
-      }
-      var legCellNums = {
-        start: tempStartNum,
-        end: tempCellNum
-        // - make this previousLast
-      };if (type === 'all') {
-        this.setState({
-          previousLegEndCell: tempCellNum,
-          previousLegX: x,
-          previousLegY: y
-          // legStartEndCellNums: [...this.state.legStartEndCellNums, legCellNums],
-          // holdAllLegColorArrs: [
-          //   ...this.state.holdAllLegColorArrs,
-          //   tempCellNumsArr
-          // ]
-        });
-        return {
-          legStartEndCellNums: legCellNums,
-          holdAllLegColorArrs: tempCellNumsArr
-        };
-      } else if (type === 'partial') {
-        this.setState({
-          previousStopX: x,
-          previousStopY: y,
-          startingCellNumPartial: tempCellNum,
-          holdingCompletedArrs: [].concat(toConsumableArray(this.state.holdingCompletedArrs), [tempCellNumsArr])
-        });
-      }
-    }
-    // on click pass props to child
-
-  }, {
-    key: 'colorCompletedStops',
-    value: function colorCompletedStops() {
-      console.log(this.state.holdingCompletedArrs);
-      var merged = [].concat.apply([], this.state.holdingCompletedArrs);
-      this.setState({
-        finalCompletedColorsArr: merged
-      });
-    }
-    // takes driver coords and finds the leg start
-
-  }, {
-    key: '_getLegStartfromCoords',
-    value: function _getLegStartfromCoords() {
-      var _this6 = this;
-
-      var selectedDriver = this.state.cursorArr[this.state.cursorIndex];
-      var coords = selectedDriver.driverCoords;
-      // if x & y is between the stops
-      var firstStop = this.state.stops.filter(function (coord, index) {
-        var stop1 = _this6.state.stops[index];
-        var stop2 = _this6.state.stops[index + 1];
-        if (stop2 === undefined) return false;
-        if (
-        // x/y are both btw
-        (coords.y > stop1.y && coords.y < stop2.y || coords.y < stop1.y && coords.y > stop2.y) && (coords.x > stop1.x && coords.x < stop2.x || coords.x < stop1.x && coords.x > stop2.x)) {
-          return coord;
-        } else if (
-        // y is bwn and x is equal
-        (coords.y > stop1.y && coords.y < stop2.y || coords.y < stop1.y && coords.y > stop2.y) && coords.x === stop1.x && coords.x === stop2.x) {
-          return coord;
-        } else if (
-        // x is bwn and y is equal
-        (coords.x > stop1.x && coords.x < stop2.x || coords.x < stop1.x && coords.x > stop2.x) && coords.y === stop1.y && coords.y === stop2.y) {
-          return coord;
-        } else if (
-        // coords are exact match
-        coords.x === stop1.x && coords.y === stop1.y) {
-          return coord;
-          // first stop  on map with nothing previous
-        } else if (index === 0 && coord === _this6.state.stops[0]) {
-          // console.log('first stop on map')
-          return coord;
-        } else {
-          // not within the stops
-          return null;
-        }
-      });
-      return firstStop;
-    }
-
-    // resets data but does not move
-
-  }, {
-    key: '_resetCursor',
-    value: function _resetCursor() {
-      this.setState({
-        finalDriverMoveObj: {
-          directions: {
-            xDir: 'left',
-            yDir: 'bottom'
-          },
-          pixels: {
-            moveX: 0,
-            moveY: 0
-          }
-        }
-      });
-    }
   }, {
     key: 'combineStyles',
     value: function combineStyles() {
@@ -1340,119 +935,7 @@ var Graph = function (_Component) {
       var obj = _extends({}, styles.gridStyles(this.props).graphContainer, styles.bodyStyles.body);
       return obj;
     }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _this7 = this;
 
-      return React__default.createElement(
-        'main',
-        { className: 'graph-container', style: this.combineStyles() },
-        React__default.createElement(
-          'div',
-          { className: 'graph', style: styles.gridStyles(this.props).graph },
-          ' ',
-          this.state.plotSets.map(function (instance, i) {
-            return React__default.createElement(Point, {
-              key: i,
-              color: instance ? instance.plotColor : null,
-              coordsArrs: _this7.state.stopsDirsArr[i]
-            });
-          }),
-          ' ',
-          React__default.createElement(Cell, {
-            toRender: this.state.boxesToRender,
-            allColorCellArr: !this.state.finalStopColorCellArr ? null : this.state.finalStopColorCellArr,
-            allColorCellObj: !this.state.finalStopColorCellObj ? null : this.state.finalStopColorCellObj,
-            type: 'all'
-          }),
-          ' '
-        )
-      );
-    }
-  }, {
-    key: '_legIndex',
-    value: function _legIndex(input) {
-      var index = void 0;
-      switch (input) {
-        // pre-stop
-        case 'ZZ':
-          index = 0;
-          break;
-        case 'AB':
-          index = 1;
-          break;
-        case 'BC':
-          index = 2;
-          break;
-        case 'CD':
-          index = 3;
-          break;
-        case 'DE':
-          index = 4;
-          break;
-        case 'EF':
-          index = 5;
-          break;
-        case 'FG':
-          index = 6;
-          break;
-        case 'GH':
-          index = 7;
-          break;
-        case 'HI':
-          index = 8;
-          break;
-        case 'IJ':
-          index = 9;
-          break;
-        case 'JK':
-          index = 10;
-          break;
-        case 'KL':
-          index = 11;
-          break;
-        default:
-          console.error('Nothing in switch');
-          break;
-      }
-      return index;
-    }
-  }, {
-    key: 'colorLeg',
-    value: function colorLeg(input) {
-      // if no props don't call
-      if (!this.props.legToColorID) return;
-      // change it to an index
-      var index = this._legIndex(input);
-      // get leg using index out of array
-      var leg = this.state.holdAllLegColorArrs[index];
-      // set state on child to change the color
-      var legObj = { leg: leg, index: index };
-      this.setState({
-        finalLegColorObj: legObj,
-        legColorsCounter: this.state.legColorsCounter + 1,
-        colorType: 'leg'
-      });
-      console.log('FL', this.state.finalLegColorObj);
-    }
-    // build legs out of stops
-
-  }, {
-    key: 'legConstructor',
-    value: function legConstructor(stops) {
-      var legs = stops.map(function (stop, i) {
-        if (!stops[i + 1]) return false;
-        return {
-          startStop: stop.name,
-          endStop: stops[i + 1].name,
-          legID: '' + stop.name + stops[i + 1].name
-        };
-      }).filter(function (stop) {
-        return stop;
-      });
-      return legs;
-    }
     // set coords in pxs of plots
 
   }, {
@@ -1494,9 +977,44 @@ var Graph = function (_Component) {
         return coords;
       }
     }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this5 = this;
+
+      return React__default.createElement(
+        'main',
+        { className: 'graph-container', style: this.combineStyles() },
+        React__default.createElement(
+          'div',
+          { className: 'graph', style: styles.gridStyles(this.props).graph },
+          ' ',
+          this.state.plotSets.map(function (instance, i) {
+            return React__default.createElement(Point, {
+              key: i,
+              color: instance ? instance.plotColor : null,
+              coordsArrs: _this5.state.stopsDirsArr[i]
+            });
+          }),
+          ' ',
+          React__default.createElement(Cell, {
+            toRender: this.state.boxesToRender,
+            allColorCellArr: !this.state.finalStopColorCellArr ? null : this.state.finalStopColorCellArr,
+            allColorCellObj: !this.state.finalStopColorCellObj ? null : this.state.finalStopColorCellObj,
+            type: 'all'
+          }),
+          ' '
+        )
+      );
+    }
   }]);
   return Graph;
 }(React.Component);
+
+Graph.propTypes = {
+  plotSets: PropTypes.object,
+  setGraphSize: PropTypes.object
+};
 
 module.exports = Graph;
 //# sourceMappingURL=export.js.map

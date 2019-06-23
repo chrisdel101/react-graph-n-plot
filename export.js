@@ -262,8 +262,6 @@ var styles = {
   cellStyles: cellStyles,
   gridStyles: gridStyles,
   pointStyles: pointStyles
-  // export gridStyles
-
 };
 
 var classCallCheck = function (instance, Constructor) {
@@ -574,54 +572,29 @@ var Cell = function (_React$Component) {
 function Point(props) {
   if (!props.coordsArrs) return null;
 
+  // make string with the pseudo selector to add point icon
   function injectIntoHead() {
     var output = '';
     var stylesArr = Object.keys(styles.pointStyles);
-    for (var i = 0; i < stylesArr.length; i += 1) {
+    for (var i = 0; i < stylesArr.length; i++) {
       var j = Object.keys(styles.pointStyles[stylesArr[i]]);
-      // console.log('j', j)
       var k = Object.values(styles.pointStyles[stylesArr[i]]);
-      // console.log('k', k)
 
       output += '.' + stylesArr[i] + '\n {';
-      // console.log('SA', stylesArr[i])
-      for (var a = 0; a < j.length; a += 1) {
-        // console.log('KEY', j[a])
+      for (var a = 0; a < j.length; a++) {
         output += ' ' + j[a] + ': ' + k[a] + '; ';
       }
-
       output += '}\n\n';
     }
-    // console.log('output', output)
-
-    // styleStr1 = `.point-marker: ${styleStr1}`
-    // let tag = document.createElement('style')
     var styleTag = document.createElement('style');
     styleTag.type = 'text/css';
-    // let str = `body: {background-color:yellow}`
     var node = document.createTextNode(output);
     styleTag.append(node);
-    // console.log(styleTag)
-
-    // let node = document.createTextNode(styleStr)
-    // tag.appendChild(node)
-    // tag.type = 'text/css'
-    // console.log(tag)
-    // let style = JSON.stringify(styles.pointStyles['point-marker:before'])
-    // style = `point-marker:before ${style}`
-    // console.log(style)
-
     var head = document.querySelector('head');
-
     head.appendChild(styleTag);
-    // let tag = document.createElement(node)
-    // console.log(head)
-    // console.log(tag)
-    // tag.appendChild(style)
-    // console.log(tag)
-    // head.append
   }
   injectIntoHead();
+
   var display = void 0;
   !props.color ? display = 'none' : display = 'block';
   return props.coordsArrs.map(function (coord, i) {

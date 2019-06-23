@@ -5,57 +5,29 @@ import styles from '../utils/styles'
 function Point(props) {
   if (!props.coordsArrs) return null
 
+  // make string with the pseudo selector to add point icon
   function injectIntoHead() {
     let output = ''
-    let stylesArr = Object.keys(styles.pointStyles)
-    for (let i = 0; i < stylesArr.length; i += 1) {
-      let j = Object.keys(styles.pointStyles[stylesArr[i]])
-      // console.log('j', j)
-      let k = Object.values(styles.pointStyles[stylesArr[i]])
-      // console.log('k', k)
+    const stylesArr = Object.keys(styles.pointStyles)
+    for (let i = 0; i < stylesArr.length; i++) {
+      const j = Object.keys(styles.pointStyles[stylesArr[i]])
+      const k = Object.values(styles.pointStyles[stylesArr[i]])
 
       output += `.${stylesArr[i]}\n {`
-      // console.log('SA', stylesArr[i])
-      for (let a = 0; a < j.length; a += 1) {
-        // console.log('KEY', j[a])
+      for (let a = 0; a < j.length; a++) {
         output += ` ${j[a]}: ${k[a]}; `
       }
-
       output += '}\n\n'
     }
-    // console.log('output', output)
-
-    // styleStr1 = `.point-marker: ${styleStr1}`
-    // let tag = document.createElement('style')
     let styleTag = document.createElement('style')
     styleTag.type = 'text/css'
-    // let str = `body: {background-color:yellow}`
     let node = document.createTextNode(output)
     styleTag.append(node)
-    // console.log(styleTag)
-
-    // let node = document.createTextNode(styleStr)
-    // tag.appendChild(node)
-    // tag.type = 'text/css'
-    // console.log(tag)
-    // let style = JSON.stringify(styles.pointStyles['point-marker:before'])
-    // style = `point-marker:before ${style}`
-    // console.log(style)
-
     let head = document.querySelector('head')
-
     head.appendChild(styleTag)
-    // let tag = document.createElement(node)
-    // console.log(head)
-    // console.log(tag)
-    // tag.appendChild(style)
-    // console.log(tag)
-    // head.append
   }
   injectIntoHead()
-  function combineStyles(prevStyles) {
-    return { ...prevStyles, ...styles.pointStyles['point-marker'] }
-  }
+
   let display
   !props.color ? (display = 'none') : (display = 'block')
   return props.coordsArrs.map((coord, i) => {

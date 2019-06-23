@@ -47,4 +47,3 @@ module.exports = {
   gridStyles,
   pointStyles
 }
-// export gridStyles

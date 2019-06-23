@@ -1,4 +1,4 @@
-body {
+/* body {
   margin: 0;
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -69,12 +69,11 @@ code {
   display: none;
 }
 
-.point-marker:before {
-  content: '\25CF';
-  font-size: 10px;
-}
-
 .point-marker {
   position: absolute;
   bottom: 0;
-}
+} */
+/* .point-marker:before {
+  content: '●';
+  font-size: 15px;
+} */

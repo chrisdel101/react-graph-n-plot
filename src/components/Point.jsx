@@ -23,7 +23,7 @@ function Point(props) {
 
       output += '}\n\n'
     }
-    console.log('output', output)
+    // console.log('output', output)
 
     // styleStr1 = `.point-marker: ${styleStr1}`
     // let tag = document.createElement('style')
@@ -32,7 +32,7 @@ function Point(props) {
     // let str = `body: {background-color:yellow}`
     let node = document.createTextNode(output)
     styleTag.append(node)
-    console.log(styleTag)
+    // console.log(styleTag)
 
     // let node = document.createTextNode(styleStr)
     // tag.appendChild(node)

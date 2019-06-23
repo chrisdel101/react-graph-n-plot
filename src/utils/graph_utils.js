@@ -16,7 +16,7 @@ var utils = (function() {
         totalX = x * 10
       }
       if (y) {
-        y = y - 10.4
+        y = y - 10
         totalY = 100 + y * 11
       } else {
         totalY = y * 10

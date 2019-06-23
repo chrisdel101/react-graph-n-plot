@@ -1,4 +1,3 @@
-import utils from '../utils/graph_utils'
 import React from 'react'
 import styles from '../utils/styles'
 import PropTypes from 'prop-types'

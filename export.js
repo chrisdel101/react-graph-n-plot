@@ -6,215 +6,6 @@ var React = require('react');
 var React__default = _interopDefault(React);
 var PropTypes = _interopDefault(require('prop-types'));
 
-var utils = function () {
-  return {
-    _convertToPixels: function _convertToPixels(x, y) {
-      if (!x) {
-        x = 0;
-      }
-      if (!y) {
-        y = 0;
-      }
-      var totalX = void 0;
-      var totalY = void 0;
-      if (x) {
-        x = x - 10;
-        totalX = 100 + x * 11;
-      } else {
-        totalX = x * 10;
-      }
-      if (y) {
-        y = y - 10;
-        totalY = 100 + y * 11;
-      } else {
-        totalY = y * 10;
-      }
-      var moveX = parseInt(totalX);
-      var moveY = parseInt(totalY);
-      var coordsObj = {
-        moveX: moveX,
-        moveY: moveY
-      };
-      return coordsObj;
-    },
-    _numToMove: function _numToMove(x, y, type) {
-      if (type === 'stop') {
-        var moveX = Math.abs(this.state.previousStopX - x);
-        var moveY = Math.abs(this.state.previousStopY - y);
-        return {
-          tempX: moveX,
-          tempY: moveY
-        };
-      } else if (type === 'leg') {
-        var _moveX = Math.abs(this.state.previousLegX - x);
-        var _moveY = Math.abs(this.state.previousLegY - y);
-        return {
-          tempX: _moveX,
-          tempY: _moveY
-        };
-      } else {
-        console.error('error in the num to move function');
-      }
-    },
-    _calcStartingCell: function _calcStartingCell(sizeObj) {
-      // find the corner cell formula is (x * y) - x
-      var startingCellNum = parseInt(sizeObj.x) * parseInt(sizeObj.y) - parseInt(sizeObj.x);
-      return startingCellNum;
-    },
-    // takes 2 objs of coords and determines the diff
-    _absDiff: function _absDiff(firstCoordsObj, secondCoordsObj) {
-      var xDiff = Math.abs(firstCoordsObj.x - secondCoordsObj.x);
-      var yDiff = Math.abs(firstCoordsObj.y - secondCoordsObj.y);
-      return {
-        xDiff: xDiff,
-        yDiff: yDiff
-      };
-    },
-    _getDriverCoords: function _getDriverCoords(firstLegStopObj, lastLegStopObj, numToMoveObj) {
-      var x1 = firstLegStopObj.x;
-      var x2 = lastLegStopObj.x;
-      var y1 = firstLegStopObj.y;
-      var y2 = lastLegStopObj.y;
-      var xNum = numToMoveObj.xNum;
-      var yNum = numToMoveObj.yNum;
-      // if x moves up, add
-      var xToMove = void 0;
-      var yToMove = void 0;
-      if (x1 < x2) {
-        xToMove = x1 + xNum;
-      } else if (x1 >= x2) {
-        xToMove = x1 - xNum;
-      } else {
-        console.error('error in driver movement');
-      }
-      if (y1 < y2) {
-        yToMove = y1 + yNum;
-      } else if (y1 >= y2) {
-        yToMove = y1 - yNum;
-      } else {
-        console.error('error in driver movement');
-      }
-      return {
-        x: xToMove,
-        y: yToMove
-      };
-    },
-    // take amount in leg with a percent - returns num to move out of total leg number
-    _percentToCoords: function _percentToCoords(diffObj, percent) {
-      var xNum = Math.floor(diffObj.xDiff * 0.01 * percent);
-      var yNum = Math.floor(diffObj.yDiff * 0.01 * percent);
-      return { xNum: xNum, yNum: yNum };
-    },
-    // takes first stop obj, driver coords obj, and abs diff of a single stops axis
-    _findPercentFromDriverCoords: function _findPercentFromDriverCoords(firstStop, driverCoords, yAbsDiff, xAbsDiff) {
-      var x1 = parseInt(firstStop.x);
-      var y1 = parseInt(firstStop.y);
-      var x2 = parseInt(driverCoords.x);
-      var y2 = parseInt(driverCoords.y);
-
-      var xDiff = void 0;
-      var yDiff = void 0;
-
-      // find number moved from last stop
-      if (x1 < x2) {
-        xDiff = x2 - x1;
-      } else if (x1 > x2) {
-        xDiff = x1 - x2;
-      } else if (x1 === x2) {
-        xDiff = 0;
-      } else {
-        console.error('error in driver movement');
-      }
-      if (y1 < y2) {
-        yDiff = y2 - y1;
-      } else if (y1 > y2) {
-        yDiff = y1 - y2;
-      } else if (y1 === y2) {
-        yDiff = 0;
-      } else {
-        console.error('error in driver movement');
-      }
-
-      // divide number moved so far in leg by total number in leg
-      var xPercent = void 0;
-      var yPercent = void 0;
-      // check for zero vals
-      if (xDiff === 0) {
-        xPercent = 0;
-      }
-      if (yDiff === 0) {
-        yPercent = 0;
-      }
-      if (xDiff && xDiff !== 0) {
-        xPercent = xDiff / xAbsDiff;
-      }
-      if (yDiff && yDiff !== 0) {
-        yPercent = yDiff / yAbsDiff;
-      }
-      // let finalPercent
-
-      // if one val is missing use the other alone
-      if (!xPercent || !yPercent) {
-        if (xPercent) {
-          return xPercent * 100;
-        } else if (yPercent) {
-          return yPercent * 100;
-        }
-      }
-      // it both are zero then zero percent
-      if (xPercent === 0 && yPercent === 0) {
-        return 0;
-      }
-
-      // use the larger leg to updaet val - TODO: make both percents equal so driver fits back into grid
-      if (xAbsDiff > yAbsDiff) {
-        return xPercent;
-      } else if (xAbsDiff < yAbsDiff) {
-        return yPercent;
-        // if equal use the larger percent
-      } else if (xAbsDiff === yAbsDiff) {
-        if (xPercent >= yPercent) {
-          return xPercent;
-        } else {
-          return yPercent;
-        }
-      } else {
-        console.error('An error occured in the percentage calcs');
-      }
-    },
-
-    // make json from the entered plot points
-    _makePlotJson: function _makePlotJson(plotsArr) {
-      return plotsArr.map(function (coords, i) {
-        return {
-          name: String.fromCharCode(i + 65),
-          x: coords.x,
-          y: coords.y
-        };
-      });
-    },
-    _toggleState: function _toggleState(currentState) {
-      if (!currentState) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-    _Cell: function _Cell(cellNum, color) {
-      this.cellNum = cellNum;
-      this.color = color;
-    },
-    _makePLotCellObj: function _makePLotCellObj(cellNum, color, CellFunc) {
-      return new CellFunc(cellNum, color);
-    },
-    _arrOfObjsToArr: function _arrOfObjsToArr(arrOfObjs, property) {
-      return arrOfObjs.map(function (obj) {
-        return obj[property];
-      });
-    }
-  };
-}();
-
 var gridStyles = function gridStyles(props) {
   return {
     graphContainer: {
@@ -446,12 +237,11 @@ Cell.propTypes = {
   type: PropTypes.string
 };
 
-// takes and array of directions and pixes for x and y
 function Point(props) {
   if (!props.coordsArrs) return null;
 
   // make string with the pseudo selector to add point icon
-  function injectIntoHead() {
+  function injectPseudoIntoHead() {
     var output = '';
     var stylesArr = Object.keys(styles.pointStyles);
     for (var i = 0; i < stylesArr.length; i++) {
@@ -471,7 +261,7 @@ function Point(props) {
     var head = document.querySelector('head');
     head.appendChild(styleTag);
   }
-  injectIntoHead();
+  injectPseudoIntoHead();
 
   var display = void 0;
   !props.color ? display = 'none' : display = 'block';
@@ -485,6 +275,215 @@ function Point(props) {
     return React__default.createElement('div', { className: 'point-marker', style: styles$$1, key: i });
   });
 }
+
+var utils = function () {
+  return {
+    _convertToPixels: function _convertToPixels(x, y) {
+      if (!x) {
+        x = 0;
+      }
+      if (!y) {
+        y = 0;
+      }
+      var totalX = void 0;
+      var totalY = void 0;
+      if (x) {
+        x = x - 10;
+        totalX = 100 + x * 11;
+      } else {
+        totalX = x * 10;
+      }
+      if (y) {
+        y = y - 10;
+        totalY = 100 + y * 11;
+      } else {
+        totalY = y * 10;
+      }
+      var moveX = parseInt(totalX);
+      var moveY = parseInt(totalY);
+      var coordsObj = {
+        moveX: moveX,
+        moveY: moveY
+      };
+      return coordsObj;
+    },
+    _numToMove: function _numToMove(x, y, type) {
+      if (type === 'stop') {
+        var moveX = Math.abs(this.state.previousStopX - x);
+        var moveY = Math.abs(this.state.previousStopY - y);
+        return {
+          tempX: moveX,
+          tempY: moveY
+        };
+      } else if (type === 'leg') {
+        var _moveX = Math.abs(this.state.previousLegX - x);
+        var _moveY = Math.abs(this.state.previousLegY - y);
+        return {
+          tempX: _moveX,
+          tempY: _moveY
+        };
+      } else {
+        console.error('error in the num to move function');
+      }
+    },
+    _calcStartingCell: function _calcStartingCell(sizeObj) {
+      // find the corner cell formula is (x * y) - x
+      var startingCellNum = parseInt(sizeObj.x) * parseInt(sizeObj.y) - parseInt(sizeObj.x);
+      return startingCellNum;
+    },
+    // takes 2 objs of coords and determines the diff
+    _absDiff: function _absDiff(firstCoordsObj, secondCoordsObj) {
+      var xDiff = Math.abs(firstCoordsObj.x - secondCoordsObj.x);
+      var yDiff = Math.abs(firstCoordsObj.y - secondCoordsObj.y);
+      return {
+        xDiff: xDiff,
+        yDiff: yDiff
+      };
+    },
+    _getDriverCoords: function _getDriverCoords(firstLegStopObj, lastLegStopObj, numToMoveObj) {
+      var x1 = firstLegStopObj.x;
+      var x2 = lastLegStopObj.x;
+      var y1 = firstLegStopObj.y;
+      var y2 = lastLegStopObj.y;
+      var xNum = numToMoveObj.xNum;
+      var yNum = numToMoveObj.yNum;
+      // if x moves up, add
+      var xToMove = void 0;
+      var yToMove = void 0;
+      if (x1 < x2) {
+        xToMove = x1 + xNum;
+      } else if (x1 >= x2) {
+        xToMove = x1 - xNum;
+      } else {
+        console.error('error in driver movement');
+      }
+      if (y1 < y2) {
+        yToMove = y1 + yNum;
+      } else if (y1 >= y2) {
+        yToMove = y1 - yNum;
+      } else {
+        console.error('error in driver movement');
+      }
+      return {
+        x: xToMove,
+        y: yToMove
+      };
+    },
+    // take amount in leg with a percent - returns num to move out of total leg number
+    _percentToCoords: function _percentToCoords(diffObj, percent) {
+      var xNum = Math.floor(diffObj.xDiff * 0.01 * percent);
+      var yNum = Math.floor(diffObj.yDiff * 0.01 * percent);
+      return { xNum: xNum, yNum: yNum };
+    },
+    // takes first stop obj, driver coords obj, and abs diff of a single stops axis
+    _findPercentFromDriverCoords: function _findPercentFromDriverCoords(firstStop, driverCoords, yAbsDiff, xAbsDiff) {
+      var x1 = parseInt(firstStop.x);
+      var y1 = parseInt(firstStop.y);
+      var x2 = parseInt(driverCoords.x);
+      var y2 = parseInt(driverCoords.y);
+
+      var xDiff = void 0;
+      var yDiff = void 0;
+
+      // find number moved from last stop
+      if (x1 < x2) {
+        xDiff = x2 - x1;
+      } else if (x1 > x2) {
+        xDiff = x1 - x2;
+      } else if (x1 === x2) {
+        xDiff = 0;
+      } else {
+        console.error('error in driver movement');
+      }
+      if (y1 < y2) {
+        yDiff = y2 - y1;
+      } else if (y1 > y2) {
+        yDiff = y1 - y2;
+      } else if (y1 === y2) {
+        yDiff = 0;
+      } else {
+        console.error('error in driver movement');
+      }
+
+      // divide number moved so far in leg by total number in leg
+      var xPercent = void 0;
+      var yPercent = void 0;
+      // check for zero vals
+      if (xDiff === 0) {
+        xPercent = 0;
+      }
+      if (yDiff === 0) {
+        yPercent = 0;
+      }
+      if (xDiff && xDiff !== 0) {
+        xPercent = xDiff / xAbsDiff;
+      }
+      if (yDiff && yDiff !== 0) {
+        yPercent = yDiff / yAbsDiff;
+      }
+      // let finalPercent
+
+      // if one val is missing use the other alone
+      if (!xPercent || !yPercent) {
+        if (xPercent) {
+          return xPercent * 100;
+        } else if (yPercent) {
+          return yPercent * 100;
+        }
+      }
+      // it both are zero then zero percent
+      if (xPercent === 0 && yPercent === 0) {
+        return 0;
+      }
+
+      // use the larger leg to updaet val - TODO: make both percents equal so driver fits back into grid
+      if (xAbsDiff > yAbsDiff) {
+        return xPercent;
+      } else if (xAbsDiff < yAbsDiff) {
+        return yPercent;
+        // if equal use the larger percent
+      } else if (xAbsDiff === yAbsDiff) {
+        if (xPercent >= yPercent) {
+          return xPercent;
+        } else {
+          return yPercent;
+        }
+      } else {
+        console.error('An error occured in the percentage calcs');
+      }
+    },
+
+    // make json from the entered plot points
+    _makePlotJson: function _makePlotJson(plotsArr) {
+      return plotsArr.map(function (coords, i) {
+        return {
+          name: String.fromCharCode(i + 65),
+          x: coords.x,
+          y: coords.y
+        };
+      });
+    },
+    _toggleState: function _toggleState(currentState) {
+      if (!currentState) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    _Cell: function _Cell(cellNum, color) {
+      this.cellNum = cellNum;
+      this.color = color;
+    },
+    _makePLotCellObj: function _makePLotCellObj(cellNum, color, CellFunc) {
+      return new CellFunc(cellNum, color);
+    },
+    _arrOfObjsToArr: function _arrOfObjsToArr(arrOfObjs, property) {
+      return arrOfObjs.map(function (obj) {
+        return obj[property];
+      });
+    }
+  };
+}();
 
 var Graph = function (_Component) {
   inherits(Graph, _Component);

@@ -1,12 +1,11 @@
 import React from 'react'
 import styles from '../utils/styles'
 
-// takes and array of directions and pixes for x and y
 function Point(props) {
   if (!props.coordsArrs) return null
 
   // make string with the pseudo selector to add point icon
-  function injectIntoHead() {
+  function injectPseudoIntoHead() {
     let output = ''
     const stylesArr = Object.keys(styles.pointStyles)
     for (let i = 0; i < stylesArr.length; i++) {
@@ -26,7 +25,7 @@ function Point(props) {
     let head = document.querySelector('head')
     head.appendChild(styleTag)
   }
-  injectIntoHead()
+  injectPseudoIntoHead()
 
   let display
   !props.color ? (display = 'none') : (display = 'block')

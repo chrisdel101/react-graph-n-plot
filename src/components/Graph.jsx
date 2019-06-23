@@ -50,7 +50,6 @@ class Graph extends Component {
     }
   }
   componentDidMount() {
-    console.log(this.props)
     this.createGraph()
     this.loadPlotDatatoPlotSets()
     this.loadGridDataintoGridSets()
@@ -149,7 +148,7 @@ class Graph extends Component {
   makeSingleCellNumArr() {
     const arr = this.state.gridSets
       .map(obj => {
-        console.log(obj)
+        // console.log(obj)
         return obj.gridColorDataObjs
       })
       .flat()
@@ -680,13 +679,18 @@ class Graph extends Component {
       }
     })
   }
+  combineStyles() {
+    console.log('DB', gridStyles.bodyStyles.body)
+    let obj = {
+      ...gridStyles.gridStyles(this.props).graphContainer,
+      ...gridStyles.bodyStyles.body
+    }
+    return obj
+  }
 
   render() {
     return (
-      <main
-        className='graph-container'
-        style={gridStyles.gridStyles(this.props).graphContainer}
-      >
+      <main className='graph-container' style={this.combineStyles()}>
         <div className='graph' style={gridStyles.gridStyles(this.props).graph}>
           {' '}
           {this.state.plotSets.map((instance, i) => {

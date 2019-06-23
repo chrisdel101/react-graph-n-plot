@@ -25,14 +25,24 @@ const cellStyles = {
 const pointStyles = {
   'point-marker:before': {
     content: "'●'",
-    'font-size': '20px'
+    'font-size': '10px'
   },
   'point-marker': {
     position: 'absolute',
     bottom: '0px'
   }
 }
+const bodyStyles = {
+  body: {
+    margin: 0,
+    fontFamily:
+      '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif',
+    WebkitFontSmoothing: 'antialiased',
+    MozOsxFontSmoothing: 'grayscale'
+  }
+}
 module.exports = {
+  bodyStyles,
   cellStyles,
   gridStyles,
   pointStyles

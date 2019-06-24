@@ -15,7 +15,7 @@ import Graph from 'react-graph-n-plot'
 ## Usage
 
 Import the graph component and use it with props.
-Each object inside `plotSets` will create a separate line. To graph only a single set of points, add only a single object.
+Each object inside the `plotSets` object will create a separate line. To graph only a single set of points, have only a single object inside `plotSets`.
 
 ```jsx
 const plotSets = {
@@ -52,7 +52,7 @@ export default class App extends Component {
 The `Graph` takes two props.
 
 1. **setGraphSize** - Object: sets the size of the graph. Both x and y _must_ be equal.
-2. **plotSets** - Array: contains one or many objects with the data used for plotting the points and connecting them to each other.
+2. **plotSets** - Object: contains one or many objects with the data used for plotting the points and connecting them to each other.
 
    - **plots** - Array: an array of objects. Each object is the x/y coords of a plot point.
    - **plotColor** - String: a string designating the color of the plot points. Leave blank for no visible plot points.

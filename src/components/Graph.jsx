@@ -29,8 +29,15 @@ class Graph extends Component {
   }
   // make props coords into useable json
   loadPlotDatatoPlotSets(type) {
-    // load plotsets into state
-    Object.values(this.props.plotSets).forEach(set => {
+    let sets
+    // if array
+    if (Array.isArray(this.props.plotSets)) {
+      sets = this.props.plotSets
+      // if object
+    } else {
+      sets = Object.values(this.props.plotSets)
+    }
+    sets.forEach(set => {
       // update with _makePlotJson func
       set.plots = utils._makePlotJson(set.plots)
       this.setState(prevState => ({

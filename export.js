@@ -396,8 +396,15 @@ var Graph = function (_Component) {
     value: function loadPlotDatatoPlotSets(type) {
       var _this2 = this;
 
-      // load plotsets into state
-      Object.values(this.props.plotSets).forEach(function (set$$1) {
+      var sets = void 0;
+      // if array
+      if (Array.isArray(this.props.plotSets)) {
+        sets = this.props.plotSets;
+        // if object
+      } else {
+        sets = Object.values(this.props.plotSets);
+      }
+      sets.forEach(function (set$$1) {
         // update with _makePlotJson func
         set$$1.plots = utils._makePlotJson(set$$1.plots);
         _this2.setState(function (prevState) {

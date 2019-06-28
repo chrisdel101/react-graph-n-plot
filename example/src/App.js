@@ -21,6 +21,6 @@ const plotSets = [
 ]
 export default class App extends Component {
   render() {
-    return <Graph setGraphSize={{ x: 20, y: 20 }} plotSets={plotSets} />
+    return <Graph setGraphSize={{ x: 100, y: 100 }} plotSets={plotSets} />
   }
 }

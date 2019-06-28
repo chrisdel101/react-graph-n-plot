@@ -739,7 +739,7 @@ var Graph = function (_Component) {
 }(React.Component);
 
 Graph.propTypes = {
-  plotSets: PropTypes.object,
+  plotSets: PropTypes.array,
   setGraphSize: PropTypes.object
 };
 

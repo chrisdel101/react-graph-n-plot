@@ -355,7 +355,7 @@ class Graph extends Component {
   }
 }
 Graph.propTypes = {
-  plotSets: PropTypes.object,
+  plotSets: PropTypes.array,
   setGraphSize: PropTypes.object
 }
 
